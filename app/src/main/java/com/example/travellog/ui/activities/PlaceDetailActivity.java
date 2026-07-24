@@ -52,7 +52,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.viewpager2.widget.ViewPager2;
+import androidx.viewpager2.widget.ViewPager2;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
