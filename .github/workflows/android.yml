@@ -3,77 +3,50 @@ name: Build TravelLog APK
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      - uses: android-actions/setup-android@v3
 
-      - name: Cache Gradle packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: gradle-${{ runner.os }}
-
-      - name: Create jlink wrapper script
+      - name: Create jlink wrapper
         run: |
           mkdir -p /home/runner/.local/bin
-          cat > /home/runner/.local/bin/jlink << 'JLINKSCRIPT'
-#!/bin/bash
-OUT="" MP=""
-for((i=0;i<${#@};i++));do a="${@:$i:1}";[ "$a"="--output" ]&&OUT="${@:$((i+1)):1}";[ "$a"="--module-path" ]&&MP="${@:$((i+1)):1}";done
-if [ -n "$MP" ]&&[ -n "$OUT" ]&&[ -f "$MP/java.base.jmod" ];then
-  mkdir -p "$OUT/lib"
-  D=$(mktemp -d)&&cd "$D"&&"${JAVA_HOME}/bin/jmod" extract "$MP/java.base.jmod" 2>/dev/null
-  cp -r lib/* "$OUT/lib/" 2>/dev/null
-  C="$ANDROID_HOME/platforms/android-34/core-for-system-modules.jar"
-  if [ -f "$C" ];then E=$(mktemp -d)&&cd "$E"&&"${JAVA_HOME}/bin/jar" xf "$C" 2>/dev/null&&"${JAVA_HOME}/bin/jar" cf "$OUT/lib/rt.jar" . 2>/dev/null&&cd -&&rm -rf "$E";fi
-  cd -&&rm -rf "$D";exit 0;fi
-JLINKSCRIPT
+          echo '#!/bin/bash
+          OUT="" MP=""
+          for((i=0;i<${#@};i++));do a="${@:$i:1}";[ "$a"="--output" ]&&OUT="${@:$((i+1)):1}";[ "$a"="--module-path" ]&&MP="${@:$((i+1)):1}";done
+          if [ -n "$MP" ]&&[ -n "$OUT" ]&&[ -f "$MP/java.base.jmod" ];then
+            mkdir -p "$OUT/lib"
+            D=$(mktemp -d)&&cd "$D"&&"${JAVA_HOME}/bin/jmod" extract "$MP/java.base.jmod" 2>/dev/null
+            cp -r lib/* "$OUT/lib/" 2>/dev/null
+            rm -rf "$D";exit 0;fi
+          ' > /home/runner/.local/bin/jlink
           chmod +x /home/runner/.local/bin/jlink
-          echo "Wrapper created at /home/runner/.local/bin/jlink"
 
-      - name: Install Android platform 34
-        run: sdkmanager "platforms;android-34" "build-tools;34.0.0"
-
-      - name: Build Debug APK
+      - name: Build APK
         run: PATH="/home/runner/.local/bin:$PATH" gradle assembleDebug --no-daemon
 
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: TravelLog-APK
           path: app/build/outputs/apk/debug/app-debug.apk
-          retention-days: 90
-          if-no-files-found: error
 
-      - name: Create Release
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      - name: Release
+        if: github.event_name == 'push'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: build-${{ github.sha }}
           name: "TravelLog Build #${{ github.run_number }}"
-          body: "Automated build of TravelLog Android app. Download app-debug.apk below."
+          body: "Download app-debug.apk below."
           files: app/build/outputs/apk/debug/app-debug.apk
-          draft: false
-          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
