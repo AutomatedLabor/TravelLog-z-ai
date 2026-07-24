@@ -33,32 +33,29 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
           restore-keys: gradle-${{ runner.os }}
 
-      - name: Install jlink workaround
+      - name: Create jlink wrapper script
         run: |
-          JDK_BIN="${JAVA_HOME}/bin"
-          REAL="${JDK_BIN}/jlink.real"
-          WRAPPER="${JDK_BIN}/jlink"
-          if [ ! -f "$REAL" ]; then
-            cp "$WRAPPER" "$REAL"
-            printf '%s\n' \
-              '#!/bin/bash' \
-              'OUT="" MP=""' \
-              'for((i=0;i<${#@};i++));do a="${@:$i:1}";[ "$a"="--output" ]&&OUT="${@:$((i+1)):1}";[ "$a"="--module-path" ]&&MP="${@:$((i+1)):1}";done' \
-              'if [ -n "$MP" ]&&[ -n "$OUT" ]&&[ -f "$MP/java.base.jmod" ];then' \
-              '  mkdir -p "$OUT/lib"' \
-              '  D=$(mktemp -d)&&cd "$D"&&"${JAVA_HOME}/bin/jmod" extract "$MP/java.base.jmod" 2>/dev/null' \
-              '  cp -r lib/* "$OUT/lib/" 2>/dev/null' \
-              '  C="$ANDROID_HOME/platforms/android-34/core-for-system-modules.jar"' \
-              '  if [ -f "$C" ];then E=$(mktemp -d)&&cd "$E"&&"${JAVA_HOME}/bin/jar" xf "$C" 2>/dev/null&&"${JAVA_HOME}/bin/jar" cf "$OUT/lib/rt.jar" . 2>/dev/null&&cd -&&rm -rf "$E";fi' \
-              '  cd -&&rm -rf "$D";exit 0;fi' \
-              "exec $REAL \"\$@\"" \
-              > "$WRAPPER"
-            chmod +x "$WRAPPER"
-            echo "jlink wrapper installed"
-          fi
+          mkdir -p /home/runner/.local/bin
+          cat > /home/runner/.local/bin/jlink << 'JLINKSCRIPT'
+#!/bin/bash
+OUT="" MP=""
+for((i=0;i<${#@};i++));do a="${@:$i:1}";[ "$a"="--output" ]&&OUT="${@:$((i+1)):1}";[ "$a"="--module-path" ]&&MP="${@:$((i+1)):1}";done
+if [ -n "$MP" ]&&[ -n "$OUT" ]&&[ -f "$MP/java.base.jmod" ];then
+  mkdir -p "$OUT/lib"
+  D=$(mktemp -d)&&cd "$D"&&"${JAVA_HOME}/bin/jmod" extract "$MP/java.base.jmod" 2>/dev/null
+  cp -r lib/* "$OUT/lib/" 2>/dev/null
+  C="$ANDROID_HOME/platforms/android-34/core-for-system-modules.jar"
+  if [ -f "$C" ];then E=$(mktemp -d)&&cd "$E"&&"${JAVA_HOME}/bin/jar" xf "$C" 2>/dev/null&&"${JAVA_HOME}/bin/jar" cf "$OUT/lib/rt.jar" . 2>/dev/null&&cd -&&rm -rf "$E";fi
+  cd -&&rm -rf "$D";exit 0;fi
+JLINKSCRIPT
+          chmod +x /home/runner/.local/bin/jlink
+          echo "Wrapper created at /home/runner/.local/bin/jlink"
+
+      - name: Install Android platform 34
+        run: sdkmanager "platforms;android-34" "build-tools;34.0.0"
 
       - name: Build Debug APK
-        run: gradle assembleDebug --no-daemon
+        run: PATH="/home/runner/.local/bin:$PATH" gradle assembleDebug --no-daemon
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
