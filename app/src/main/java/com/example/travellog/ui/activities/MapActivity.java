@@ -16,6 +16,7 @@ import com.example.travellog.data.db.entity.Place;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.IMapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
@@ -30,7 +31,7 @@ public class MapActivity extends AppCompatActivity {
     public static final String EXTRA_PLACE_NAME = "extra_place_name";
 
     private MapView mapView;
-    private MapController mapController;
+    private IMapController mapController;
     private ArrayList<OverlayItem> overlayItems = new ArrayList<>();
 
     @Override
@@ -53,7 +54,7 @@ public class MapActivity extends AppCompatActivity {
         mapView.setBuiltInZoomControls(false);
         mapView.setMultiTouchControls(true);
 
-        mapController = (MapController) mapView.getController();
+        mapController = mapView.getController();
         mapController.setZoom(15.0);
 
         double lat = getIntent().getDoubleExtra(EXTRA_LATITUDE, 0);
