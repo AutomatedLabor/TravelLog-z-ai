@@ -44,7 +44,7 @@ public class MapActivity extends AppCompatActivity {
 
         mapView = findViewById(R.id.mapView);
         // Use OpenTopoMap - free, no blocking, OSM-based
-        mapView.setTileSource(TileSourceFactory.OpenTopoMap);
+        mapView.setTileSource(TileSourceFactory.MAPNIK);
         mapView.setBuiltInZoomControls(false);
         mapView.setMultiTouchControls(true);
         mapView.getController().setZoom(15.0);
