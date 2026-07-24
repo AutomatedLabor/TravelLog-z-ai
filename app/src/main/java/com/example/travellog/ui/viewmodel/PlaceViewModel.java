@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
+import com.example.travellog.TravelLogApp;
 import com.example.travellog.data.db.entity.Place;
 import com.example.travellog.data.db.entity.PlaceMedia;
 import com.example.travellog.data.db.entity.PlaceNote;

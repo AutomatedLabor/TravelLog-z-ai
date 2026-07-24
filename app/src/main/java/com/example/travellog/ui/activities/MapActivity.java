@@ -15,7 +15,7 @@ import com.example.travellog.R;
 import com.example.travellog.data.db.entity.Place;
 
 import org.osmdroid.config.Configuration;
-import org.osmdroid.views.MapController;
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
@@ -61,17 +61,17 @@ public class MapActivity extends AppCompatActivity {
         String placeName = getIntent().getStringExtra(EXTRA_PLACE_NAME);
 
         if (lat != 0 && lon != 0) {
-            mapController.setCenter(new org.osmdroid.api.GeoPoint(lat, lon));
+            mapController.setCenter(new GeoPoint(lat, lon));
 
             OverlayItem item = new OverlayItem(
                     placeName != null ? placeName : "Place",
                     "",
-                    new org.osmdroid.api.GeoPoint(lat, lon)
+                    new GeoPoint(lat, lon)
             );
             item.setMarker(ContextCompat.getDrawable(this, android.R.drawable.ic_menu_myplaces));
             overlayItems.add(item);
         } else {
-            mapController.setCenter(new org.osmdroid.api.GeoPoint(51.5074, -0.1278));
+            mapController.setCenter(new GeoPoint(51.5074, -0.1278));
             mapController.setZoom(5.0);
         }
 
@@ -93,7 +93,7 @@ public class MapActivity extends AppCompatActivity {
         findViewById(R.id.btnZoomIn).setOnClickListener(v -> mapController.zoomIn());
         findViewById(R.id.btnZoomOut).setOnClickListener(v -> mapController.zoomOut());
         findViewById(R.id.btnMyLocation).setOnClickListener(v ->
-                mapController.setCenter(new org.osmdroid.api.GeoPoint(51.5074, -0.1278))
+                mapController.setCenter(new GeoPoint(51.5074, -0.1278))
         );
     }
 
