@@ -30,84 +30,35 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            gradle-${{ runner.os }}
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: gradle-${{ runner.os }}
 
-      - name: Fix jlink for AGP
+      - name: Install jlink workaround
         run: |
-          JDK_HOME=$JAVA_HOME
-          JLINK_REAL="$JDK_HOME/bin/jlink.real"
-          JLINK_WRAPPER="$JDK_HOME/bin/jlink"
-          
-          if [ ! -f "$JLINK_REAL" ]; then
-            mv "$JLINK_WRAPPER" "$JLINK_REAL"
-            cat > "$JLINK_WRAPPER" << 'WRAPPER_EOF'
-#!/bin/bash
-SKIP_REAL=0
-OUTPUT_DIR=""
-MODULE_PATH=""
-for ((i=0; i<${#@}; i++)); do
-    arg="${@:$i:1}"
-    if [ "$arg" = "--output" ]; then next="${@:$((i+1)):1}"; OUTPUT_DIR="$next"; fi
-    if [ "$arg" = "--module-path" ]; then next="${@:$((i+1)):1}"; MODULE_PATH="$next"; fi
-done
-if [ -n "$MODULE_PATH" ] && [ -n "$OUTPUT_DIR" ] && [ -f "$MODULE_PATH/java.base.jmod" ]; then
-    mkdir -p "$OUTPUT_DIR/lib"
-    EXTRACT_DIR=$(mktemp -d)
-    cd "$EXTRACT_DIR"
-    "$JAVA_HOME/bin/jmod" extract "$MODULE_PATH/java.base.jmod" 2>/dev/null
-    cp -r lib/* "$OUTPUT_DIR/lib/" 2>/dev/null
-    CORE_JAR="$ANDROID_HOME/platforms/android-34/core-for-system-modules.jar"
-    if [ -f "$CORE_JAR" ]; then
-        EXTRACT2=$(mktemp -d)
-        cd "$EXTRACT2"
-        "$JAVA_HOME/bin/jar" xf "$CORE_JAR" 2>/dev/null
-        "$JAVA_HOME/bin/jar" cf "$OUTPUT_DIR/lib/rt.jar" . 2>/dev/null
-        rm -rf "$EXTRACT2"
-    fi
-    rm -rf "$EXTRACT_DIR"
-    exit 0
-fi
-exec "$JDK_HOME/bin/jlink.real" "$@"
-WRAPPER_EOF
-            chmod +x "$JLINK_WRAPPER"
+          JDK_BIN="${JAVA_HOME}/bin"
+          REAL="${JDK_BIN}/jlink.real"
+          WRAPPER="${JDK_BIN}/jlink"
+          if [ ! -f "$REAL" ]; then
+            cp "$WRAPPER" "$REAL"
+            printf '%s\n' \
+              '#!/bin/bash' \
+              'OUT="" MP=""' \
+              'for((i=0;i<${#@};i++));do a="${@:$i:1}";[ "$a"="--output" ]&&OUT="${@:$((i+1)):1}";[ "$a"="--module-path" ]&&MP="${@:$((i+1)):1}";done' \
+              'if [ -n "$MP" ]&&[ -n "$OUT" ]&&[ -f "$MP/java.base.jmod" ];then' \
+              '  mkdir -p "$OUT/lib"' \
+              '  D=$(mktemp -d)&&cd "$D"&&"${JAVA_HOME}/bin/jmod" extract "$MP/java.base.jmod" 2>/dev/null' \
+              '  cp -r lib/* "$OUT/lib/" 2>/dev/null' \
+              '  C="$ANDROID_HOME/platforms/android-34/core-for-system-modules.jar"' \
+              '  if [ -f "$C" ];then E=$(mktemp -d)&&cd "$E"&&"${JAVA_HOME}/bin/jar" xf "$C" 2>/dev/null&&"${JAVA_HOME}/bin/jar" cf "$OUT/lib/rt.jar" . 2>/dev/null&&cd -&&rm -rf "$E";fi' \
+              '  cd -&&rm -rf "$D";exit 0;fi' \
+              "exec $REAL \"\$@\"" \
+              > "$WRAPPER"
+            chmod +x "$WRAPPER"
             echo "jlink wrapper installed"
-          else
-            echo "jlink wrapper already exists"
-          fi
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew 2>/dev/null || true
-
-      - name: Create gradle wrapper
-        run: |
-          if [ ! -f gradlew ]; then
-            mkdir -p gradle/wrapper
-            cat > gradle/wrapper/gradle-wrapper.properties << 'EOF'
-distributionBase=GRADLE_USER_HOME
-distributionPath=wrapper/dists
-distributionUrl=https\://services.gradle.org/distributions/gradle-8.4-bin.zip
-networkTimeout=10000
-validateDistributionUrl=true
-zipStoreBase=GRADLE_USER_HOME
-zipStorePath=wrapper/dists
-EOF
-            GRADLE_HOME=/opt/gradle/gradle-8.4
-            if [ -d "$GRADLE_HOME" ]; then
-              cp "$GRADLE_HOME/lib/gradle-launcher-*.jar" gradle/wrapper/ 2>/dev/null || true
-              cp "$GRADLE_HOME/lib/gradle-core-*.jar" gradle/wrapper/ 2>/dev/null || true
-            fi
-            # Just use the gradle command directly
-            echo '#!/bin/bash' > gradlew
-            echo 'exec gradle "$@"' >> gradlew
-            chmod +x gradlew
           fi
 
       - name: Build Debug APK
         run: gradle assembleDebug --no-daemon
-        env:
-          JAVA_HOME: ${{ env.JAVA_HOME }}
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
@@ -117,26 +68,13 @@ EOF
           retention-days: 90
           if-no-files-found: error
 
-      - name: Create Release with APK
+      - name: Create Release
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: build-${{ github.sha }}
           name: "TravelLog Build #${{ github.run_number }}"
-          body: |
-            Automated build of TravelLog Android app.
-            
-            ## Download APK
-            Download the `app-debug.apk` from the assets below.
-            
-            ## Features
-            - Offline-first place management
-            - Photos, videos, receipt capture
-            - Voice recordings
-            - Notes and tags
-            - Offline maps (OSMDroid)
-            - Category filtering, search, favorites
-            - Statistics dashboard
+          body: "Automated build of TravelLog Android app. Download app-debug.apk below."
           files: app/build/outputs/apk/debug/app-debug.apk
           draft: false
           prerelease: false
