@@ -18,22 +18,22 @@ jobs:
 
       - uses: android-actions/setup-android@v3
 
-      - name: Create jlink wrapper
+      - name: Create jlink workaround
         run: |
-          mkdir -p /home/runner/.local/bin
+          mkdir -p $HOME/.local/bin
           echo '#!/bin/bash
           OUT="" MP=""
           for((i=0;i<${#@};i++));do a="${@:$i:1}";[ "$a"="--output" ]&&OUT="${@:$((i+1)):1}";[ "$a"="--module-path" ]&&MP="${@:$((i+1)):1}";done
           if [ -n "$MP" ]&&[ -n "$OUT" ]&&[ -f "$MP/java.base.jmod" ];then
-            mkdir -p "$OUT/lib"
-            D=$(mktemp -d)&&cd "$D"&&"${JAVA_HOME}/bin/jmod" extract "$MP/java.base.jmod" 2>/dev/null
-            cp -r lib/* "$OUT/lib/" 2>/dev/null
-            rm -rf "$D";exit 0;fi
-          ' > /home/runner/.local/bin/jlink
-          chmod +x /home/runner/.local/bin/jlink
+          mkdir -p "$OUT/lib"
+          D=$(mktemp -d)&&cd "$D"&&"${JAVA_HOME}/bin/jmod" extract "$MP/java.base.jmod" 2>/dev/null
+          cp -r lib/* "$OUT/lib/" 2>/dev/null
+          rm -rf "$D";exit 0;fi
+          ' > $HOME/.local/bin/jlink
+          chmod +x $HOME/.local/bin/jlink
 
       - name: Build APK
-        run: PATH="/home/runner/.local/bin:$PATH" gradle assembleDebug --no-daemon
+        run: PATH="$HOME/.local/bin:$PATH" ./gradlew assembleDebug --no-daemon
 
       - uses: actions/upload-artifact@v4
         with:
