@@ -11,6 +11,8 @@ import com.example.travellog.R;
 import com.google.android.material.appbar.MaterialToolbar;
 
 import org.osmdroid.config.Configuration;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 import org.osmdroid.views.MapView;
 
 public class MapActivity extends AppCompatActivity {
@@ -33,10 +35,16 @@ public class MapActivity extends AppCompatActivity {
         }
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        Configuration.getInstance().setUserAgentValue(getPackageName());
+        // Set proper OSM User-Agent to comply with tile usage policy
+        String userAgent = getPackageName() + "/1.0 (travellog-app)";
+        Configuration.getInstance().setUserAgentValue(userAgent);
+        // Enable tile caching to reduce server load
+        Configuration.getInstance().setTileFileSystemCacheMaxBytes(50L * 1024 * 1024);
+        Configuration.getInstance().setTileFileSystemCacheTrimBytes(25L * 1024 * 1024);
 
         mapView = findViewById(R.id.mapView);
-        mapView.setTileSource(org.osmdroid.tileprovider.tilesource.TileSourceFactory.MAPNIK);
+        // Use OpenTopoMap - free, no blocking, OSM-based
+        mapView.setTileSource(TileSourceFactory.OpenTopoMap);
         mapView.setBuiltInZoomControls(false);
         mapView.setMultiTouchControls(true);
         mapView.getController().setZoom(15.0);
