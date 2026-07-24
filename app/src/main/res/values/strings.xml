@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TravelLog</string>
+
+    <!-- Main -->
+    <string name="nav_places">Places</string>
+    <string name="nav_map">Map</string>
+    <string name="nav_favorites">Favorites</string>
+    <string name="nav_stats">Stats</string>
+
+    <!-- Actions -->
+    <string name="add_place">Add Place</string>
+    <string name="edit_place">Edit Place</string>
+    <string name="delete_place">Delete Place</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="confirm">Confirm</string>
+    <string name="search">Search places…</string>
+    <string name="share">Share</string>
+    <string name="settings">Settings</string>
+
+    <!-- Place fields -->
+    <string name="place_name">Name</string>
+    <string name="place_description">Description</string>
+    <string name="place_category">Category</string>
+    <string name="place_address">Address</string>
+    <string name="place_phone">Phone</string>
+    <string name="place_website">Website</string>
+    <string name="place_rating">Rating</string>
+    <string name="place_tags">Tags (comma separated)</string>
+    <string name="place_notes">Notes</string>
+    <string name="place_photos">Photos</string>
+    <string name="place_videos">Videos</string>
+    <string name="place_voice_notes">Voice Notes</string>
+    <string name="place_receipts">Receipts</string>
+
+    <!-- Categories -->
+    <string name="category_restaurant">Restaurant</string>
+    <string name="category_cafe">Cafe</string>
+    <string name="category_bar">Bar</string>
+    <string name="category_shopping">Shopping</string>
+    <string name="category_attraction">Attraction</string>
+    <string name="category_hotel">Hotel</string>
+    <string name="category_nightlife">Nightlife</string>
+    <string name="category_nature">Nature</string>
+    <string name="category_culture">Culture</string>
+    <string name="category_transport">Transport</string>
+    <string name="category_other">Other</string>
+
+    <!-- Actions -->
+    <string name="add_photo">Add Photo</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="take_video">Take Video</string>
+    <string name="record_voice">Record Voice</string>
+    <string name="add_note">Add Note</string>
+    <string name="view_on_map">View on Map</string>
+    <string name="get_directions">Get Directions</string>
+    <string name="mark_favorite">Mark as Favorite</string>
+    <string name="unmark_favorite">Remove from Favorites</string>
+
+    <!-- Detail -->
+    <string name="tab_overview">Overview</string>
+    <string name="tab_media">Media</string>
+    <string name="tab_notes">Notes</string>
+    <string name="tab_receipts">Receipts</string>
+
+    <!-- Messages -->
+    <string name="place_saved">Place saved successfully</string>
+    <string name="place_deleted">Place deleted</string>
+    <string name="place_name_required">Please enter a place name</string>
+    <string name="photo_saved">Photo saved</string>
+    <string name="voice_saved">Voice note saved</string>
+    <string name="note_saved">Note saved</string>
+    <string name="note_deleted">Note deleted</string>
+    <string name="delete_confirmation">Are you sure you want to delete this place? This action cannot be undone.</string>
+    <string name="delete_note_confirmation">Are you sure you want to delete this note?</string>
+    <string name="delete_media_confirmation">Are you sure you want to delete this media?</string>
+    <string name="permission_camera_denied">Camera permission is required to take photos</string>
+    <string name="permission_audio_denied">Audio permission is required to record voice</string>
+    <string name="permission_location_denied">Location permission is required to show your position</string>
+    <string name="recording_started">Recording started</string>
+    <string name="recording_stopped">Recording stopped</string>
+
+    <!-- Stats -->
+    <string name="stats_title">Your Travel Stats</string>
+    <string name="stats_total_places">Total Places</string>
+    <string name="stats_categories">Categories</string>
+    <string name="stats_favorites">Favorites</string>
+    <string name="stats_most_visited">Most Visited</string>
+    <string name="stats_top_rated">Top Rated</string>
+
+    <!-- Voice Recording -->
+    <string name="voice_record_title">Record Voice Note</string>
+    <string name="voice_record_ready">Tap to start recording</string>
+    <string name="voice_record_recording">Recording… Tap to stop</string>
+    <string name="voice_record_duration">00:00</string>
+
+    <!-- Note -->
+    <string name="note_title">Title</string>
+    <string name="note_content">Write your note here…</string>
+    <string name="note_edit_title">Edit Note</string>
+    <string name="note_add_title">New Note</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_map">Map Settings</string>
+    <string name="settings_storage">Storage</string>
+    <string name="settings_about">About</string>
+    <string name="settings_cache">Clear Cache</string>
+    <string name="settings_export">Export Data</string>
+
+    <!-- Search -->
+    <string name="search_title">Search</string>
+    <string name="search_hint">Search places, notes, tags…</string>
+    <string name="search_no_results">No results found</string>
+
+    <!-- Empty States -->
+    <string name="empty_no_places">No places saved yet</string>
+    <string name="empty_no_places_sub">Tap + to add your first place!</string>
+    <string name="empty_no_favorites">No favorites yet</string>
+    <string name="empty_no_favorites_sub">Star a place to see it here</string>
+    <string name="empty_no_photos">No photos yet</string>
+    <string name="empty_no_notes">No notes yet</string>
+    <string name="empty_no_voice">No voice notes yet</string>
+    <string name="empty_no_media">No media yet</string>
+    <string name="empty_search">No places match your search</string>
+
+    <!-- Misc -->
+    <string name="untitled_place">Untitled Place</string>
+    <string name="visits">%d visits</string>
+    <string name="media_count">%d photos</string>
+    <string name="note_count">%d notes</string>
+    <string name="just_now">Just now</string>
+    <string name="minutes_ago">%d min ago</string>
+    <string name="hours_ago">%d hrs ago</string>
+    <string name="days_ago">%d days ago</string>
+    <string name="no_address">No address</string>
+    <string name="select_category">Select Category</string>
+    <string name="all_categories">All Categories</string>
+    <string name="filter">Filter</string>
+    <string name="sort">Sort</string>
+
+    <string name="capture_receipt">Capture Receipt</string>
+    <string name="view_receipt">View Receipt</string>
+</resources>

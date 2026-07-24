@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Place card item for RecyclerView -->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card"
+   
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_small"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardCornerRadius="@dimen/card_corner_radius">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Cover Image -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/place_card_image_height">
+
+            <ImageView
+                android:id="@+id/ivCoverImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@android:drawable/ic_menu_gallery"
+                android:contentDescription="@string/place_photos" />
+
+            <!-- Category Badge -->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|start"
+                android:layout_margin="@dimen/margin_small"
+                android:text="@string/category_other"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_small"
+                app:chipBackgroundColor="@color/cat_other"
+                app:chipCornerRadius="16dp"
+                app:chipMinHeight="24dp"
+                app:chipStartPadding="8dp"
+                app:chipEndPadding="8dp"
+                style="@style/Widget.MaterialComponents.Chip.Action" />
+
+            <!-- Favorite indicator -->
+            <ImageView
+                android:id="@+id/ivFavorite"
+                android:layout_width="@dimen/icon_medium"
+                android:layout_height="@dimen/icon_medium"
+                android:layout_gravity="top|end"
+                android:layout_margin="@dimen/margin_small"
+                android:src="@android:drawable/btn_star_big_off"
+                android:contentDescription="@string/mark_favorite" />
+
+        </FrameLayout>
+
+        <!-- Content -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/card_inner_padding">
+
+            <!-- Name -->
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/untitled_place"
+                android:textSize="@dimen/text_subtitle"
+                android:textColor="@color/text_primary"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textStyle="bold" />
+
+            <!-- Description -->
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text=""
+                android:textSize="@dimen/text_body"
+                android:textColor="@color/text_secondary"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:visibility="gone" />
+
+            <!-- Info row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <!-- Rating -->
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/icon_small"
+                    android:numStars="5"
+                    android:stepSize="0.5"
+                    android:rating="0"
+                    style="?attr/ratingBarStyleSmall"
+                    android:progressTint="@color/star_filled"
+                    android:progressBackgroundTint="@color/star_empty"
+                    android:isIndicator="true" />
+
+                <!-- Address -->
+                <TextView
+                    android:id="@+id/tvAddress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:text=""
+                    android:textSize="@dimen/text_caption"
+                    android:textColor="@color/text_hint"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:drawableStart="@android:drawable/ic_menu_mapmode"
+                    android:drawablePadding="4dp" />
+
+            </LinearLayout>
+
+            <!-- Bottom row: tags, media counts -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvTags"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:textSize="@dimen/text_small"
+                    android:textColor="@color/text_hint"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tvMediaCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_small"
+                    android:textColor="@color/text_hint"
+                    android:drawableStart="@android:drawable/ic_menu_camera"
+                    android:drawablePadding="4dp" />
+
+                <TextView
+                    android:id="@+id/tvNoteCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/padding_small"
+                    android:text=""
+                    android:textSize="@dimen/text_small"
+                    android:textColor="@color/text_hint"
+                    android:drawableStart="@android:drawable/ic_menu_edit"
+                    android:drawablePadding="4dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

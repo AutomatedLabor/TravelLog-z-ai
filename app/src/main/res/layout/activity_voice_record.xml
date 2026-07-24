@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="@dimen/margin_large">
+
+    <TextView
+        android:id="@+id/tvTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/voice_record_duration"
+        android:textSize="48sp"
+        android:textColor="@color/text_primary"
+        android:fontFamily="monospace"
+        android:layout_marginBottom="@dimen/margin_large" />
+
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/voice_record_ready"
+        android:textSize="@dimen/text_subtitle"
+        android:textColor="@color/text_secondary"
+        android:layout_marginBottom="@dimen/margin_xlarge" />
+
+    <ImageButton
+        android:id="@+id/btnRecord"
+        android:layout_width="@dimen/recording_button_size"
+        android:layout_height="@dimen/recording_button_size"
+        android:src="@android:drawable/ic_btn_speak_now"
+        android:background="@drawable/bg_record_button"
+        android:contentDescription="@string/record_voice"
+        android:scaleType="centerInside"
+        android:padding="@dimen/padding_large" />
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_large"
+        android:text="@string/save"
+        android:visibility="gone" />
+
+</LinearLayout>
