@@ -158,7 +158,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("");
         }
 
-        findViewById(R.id.toolbar).setNavigationOnClickListener(v -> onBackPressed());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         btnFavorite.setOnClickListener(v -> {
             if (currentPlace != null) {
@@ -287,8 +287,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
         }
 
         // Update tab layout with counts
-        List<PlaceMedia> currentMedia = mediaAdapter == null ? null : viewModel.getMediaForPlaceSync(placeId);
-        List<PlaceNote> currentNotes = noteAdapter == null ? null : viewModel.getNotesForPlaceSync(placeId);
+        // Media and note counts updated by LiveData observers
     }
 
     private void switchTab(int position) {

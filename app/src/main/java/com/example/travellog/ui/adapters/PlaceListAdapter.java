@@ -123,7 +123,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.Plac
             // Category chip
             String categoryName = Category.getCategoryName(place.category);
             chipCategory.setText(categoryName);
-            chipCategory.setChipBackgroundColor(Category.getCategoryColor(place.category));
+            chipCategory.setChipBackgroundColor(android.content.res.ColorStateList.valueOf(Category.getCategoryColor(place.category)));
 
             // Rating
             ratingBar.setRating(place.rating);

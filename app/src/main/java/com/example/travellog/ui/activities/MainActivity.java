@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity
             Chip chip = new Chip(this);
             chip.setText(cat.name);
             chip.setCheckable(true);
-            chip.setChipBackgroundColor(cat.colorRes);
+            chip.setChipBackgroundColor(android.content.res.ColorStateList.valueOf(cat.colorRes));
             chip.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
             chip.setOnClickListener(v -> {
                 selectedCategory = cat.id;

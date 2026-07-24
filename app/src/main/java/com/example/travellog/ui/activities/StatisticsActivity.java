@@ -37,16 +37,22 @@ public class StatisticsActivity extends AppCompatActivity {
 
         // Setup most visited list
         RecyclerView rvMostVisited = findViewById(R.id.recyclerViewMostVisited);
-        mostVisitedAdapter = new PlaceListAdapter(this, (place, position) -> {
-            // Click handler
+        mostVisitedAdapter = new PlaceListAdapter(this, new PlaceListAdapter.OnPlaceClickListener() {
+            @Override
+            public void onPlaceClick(Place place, int position) {}
+            @Override
+            public void onFavoriteClick(Place place, int position) {}
         });
         rvMostVisited.setLayoutManager(new LinearLayoutManager(this));
         rvMostVisited.setAdapter(mostVisitedAdapter);
 
         // Setup top rated list
         RecyclerView rvTopRated = findViewById(R.id.recyclerViewTopRated);
-        topRatedAdapter = new PlaceListAdapter(this, (place, position) -> {
-            // Click handler
+        topRatedAdapter = new PlaceListAdapter(this, new PlaceListAdapter.OnPlaceClickListener() {
+            @Override
+            public void onPlaceClick(Place place, int position) {}
+            @Override
+            public void onFavoriteClick(Place place, int position) {}
         });
         rvTopRated.setLayoutManager(new LinearLayoutManager(this));
         rvTopRated.setAdapter(topRatedAdapter);
